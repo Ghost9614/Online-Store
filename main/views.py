@@ -1,14 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-
+from goods.models import Categories
 
 def index(request):
+    categories = Categories.objects.all()
+
     context = {
         'title': 'Home - Главная',
-        'content': "Магазин мебели HOME"
-        
-
-
+        'content': 'Магазин мебели HOME',
+        'categories': categories  # Исправлена опечатка
     }
 
     return render(request, 'main/index.html', context)
@@ -17,8 +17,7 @@ def index(request):
 def about(request):
     context = {
         'title': 'Home - О нас',
-        'content': "О нас",
-        "text_on_page":"пыывапыв"
-        
+        'content': 'О нас',
+        'text_on_page': 'пыывапыв'
     }
     return render(request, 'main/about.html', context)
