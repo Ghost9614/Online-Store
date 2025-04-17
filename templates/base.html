@@ -1,8 +1,9 @@
 {% load static %}
+{% load cache %}
 {% load goods_tags %}
 
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -13,8 +14,7 @@
     <!-- Стиль footer-a для главной страницы -->
     {% block css %}
 
-    
-    {% endblock  %}
+    {% endblock %}
     <!-- Favicons for different platforms -->
     <link rel="apple-touch-icon" sizes="180x180" href="{% static "deps/favicon/apple-touch-icon.png" %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static "deps/favicon/favicon-32x32.png" %}">
@@ -63,10 +63,9 @@
                                     <li><a class="dropdown-item  text-white" href="carts/cart.html">Корзина</a></li>
                                     <li><a class="dropdown-item  text-white" href="{% url "user:profile" %}">Личный кабинет</a>
                                     </li>
-                                    {% if user.is_admin or iser.if_staff %}
+                                    {% if user.is_admin or user.is_staff %}
                                         <li><a class="dropdown-item  text-white" href="{% url "admin:index" %}">Админ панель</a></li>
                                     {% endif %}
-                                    
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -74,7 +73,6 @@
                                 </ul>
                             </li>
                         {% endif %}
-                        
                     </ul>
                     <form class="d-flex" role="search" action="{% url "catalog:search" %}" method="get">
                         <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
@@ -97,16 +95,17 @@
                             height="16">
                     </button>
                     <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
+                        {% cache 60 catalog_categories %}
                         {% tag_categories as categories %}
                         {% for category in categories %}
-                            <li><a class="dropdown-item text-white" href="{% url "catalog:index" category.slug %}">{{ category.name }}</a></li>
+                            <li><a class="dropdown-item text-white" href="{% url "catalog:index" category.slug %}">{{category.name}}</a></li>
                         {% endfor %}
-                        
+                        {% endcache %}
+
                     </ul>
                 </div>
                 <!-- Значек корзины, вызывает модальное окно -->
-                {% block model_cart %}
-                {% endblock %}
+                {% block modal_cart %}{% endblock  %}
                 <!-- Закончилась разметка модального окна -->
             </div>
         </div>
@@ -118,19 +117,18 @@
                 </div>
                 <div class="col-lg-10">
                     <!-- Контент на странице -->
-                     {% include "includes/notifications.html" %}
-                    {% block content %}
-                    
-                    {% endblock %}
+                    {% include "includes/notifications.html" %}
+                    {% block content %}{% endblock %}
                 </div>
             </div>
         </div>
     </section>
-    {% block footer %}
-    
-    {% endblock %}
+
+    {% block footer %}{% endblock %}
+
     <script src="{% static "deps/js/jquery/jquery-3.7.0.min.js" %}"></script>
-    
     <script src="{% static "deps/js/jquery-ajax.js" %}"></script>
     <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
 </body>
+
+</html>

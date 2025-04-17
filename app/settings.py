@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
-from django.conf.global_settings import AUTH_USER_MODEL, LOGIN_URL, MEDIA_ROOT, MEDIA_URL
 from django.http import HttpResponseNotFound
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,11 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*h(d1yl^56@twk0j)a8wsg_$-#p2z^2z0k(&($%7=7isajat5@'
+SECRET_KEY = 'django-insecure-ld)8k$gfoow^#9-6mm@palg6l9d)&l!5ng#m2@=msxhq353g#2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,8 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
 
-    'debug_toolbar',
-
+    "debug_toolbar",
 
     'main',
     'goods',
@@ -63,7 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -93,14 +90,21 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Home',
-        'USER': 'Home',
-        'PASSWORD': '1234',
+        'NAME': 'home',
+        'USER': 'home',
+        'PASSWORD': 'home',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
 
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -138,18 +142,24 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS: list = [
-    BASE_DIR/ 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
     ]
 
 MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-INTERNAL_IPS = ['127.0.0.1',]
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = 'user/login/'
+LOGIN_URL = '/user/login/'
+LOGIN_REDIRECT_URL = '/'

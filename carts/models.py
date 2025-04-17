@@ -1,6 +1,6 @@
 from django.db import models
-
 from goods.models import Products
+
 from users.models import User
 
 
@@ -13,6 +13,7 @@ class CartQueryset(models.QuerySet):
         if self:
             return sum(cart.quantity for cart in self)
         return 0
+    
 
 class Cart(models.Model):
 
@@ -26,7 +27,7 @@ class Cart(models.Model):
         db_table = 'cart'
         verbose_name = "Корзина"
         verbose_name_plural = "Корзина"
-        #ordering = ("id",)
+        ordering = ("id",)
 
     objects = CartQueryset().as_manager()
 
@@ -38,4 +39,4 @@ class Cart(models.Model):
         if self.user:
             return f'Корзина {self.user.username} | Товар {self.product.name} | Количество {self.quantity}'
             
-        #return f'Анонимная корзина | Товар {self.product.name} | Количество {self.quantity}'
+        return f'Анонимная корзина | Товар {self.product.name} | Количество {self.quantity}'
